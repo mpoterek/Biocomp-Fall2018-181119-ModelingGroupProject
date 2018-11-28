@@ -31,5 +31,6 @@ y0=[25.,5.]
 parameters=(0.5,0.02,0.1,0.2)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
 simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-print(ggplot(simDF,aes(x="t",y="prey"))+geom_line()+geom_line(simDF,aes(x="t",y="predator"),color="red")+theme_classic())
-
+p=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
+p=p+labs(title="Lotka-Volterra Model",x="Time",y="Population")+theme_classic()
+print(p)
