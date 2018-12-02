@@ -22,12 +22,28 @@ def RMSim(y,t0,b,e,a,s,w,d):
     #print(dHdt)
     
     return [dHdt,dPdt]
-
+'''
 # Case 1
-times=range(1,100)
+times=range(1,500)
 y0=[500.,120.]
 parameters=(0.8,0.07,0.001,0.2,5,400)
-sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
+sim=spint.odeint(func=RMSim,y0=y0,t=times,args=parameters)
 simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-print(ggplot(simDF,aes(x="t",y="prey"))+geom_line()+geom_line(simDF,aes(x="t",y="predator"),color="red")+theme_classic())
+p=ggplot(simDF,aes(x="t",y="prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes(x="t",y="predator"),color="red",size=1)
+p=p+labs(title="Rosenzweig-MacArthur Model \n Suggested Parameters",x="Time",y="Population")+theme_classic()
+p=p+scale_x_continuous(breaks=(0,100,200,300,400,500))+scale_y_continuous(breaks=(0,200,400,600,800,1000))
+print(p)
+'''
 
+
+# Paradox of Enrichment
+times=range(1,500)
+y0=[500.,120.]
+parameters=(0.8,0.07,0.001,0.2,5,400)
+sim=spint.odeint(func=RMSim,y0=y0,t=times,args=parameters)
+simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
+q=ggplot(simDF,aes(x="t",y="prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes(x="t",y="predator"),color="red",size=1)
+q=q+labs(title="Rosenzweig-MacArthur Model \n alpha=0.001",x="Time",y="Population")+theme_classic()
+q=q+scale_x_continuous(breaks=(0,100,200,300,400,500))+scale_y_continuous(breaks=(0,200,400,600,800,1000,1200,1400,1600,1800,2000))
+print(q)
+#q.save('RM_a=0.001.png')
