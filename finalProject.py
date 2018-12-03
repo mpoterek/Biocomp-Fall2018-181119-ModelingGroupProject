@@ -11,7 +11,9 @@ Look at Exercise 10 part 2 to find a basis for the Lotka-Volterra model
 import pandas
 import scipy
 import scipy.integrate as spint
+import matplotlib.pyplot as plt
 from plotnine import *
+import numpy as np
 
 # Challenge - Lotka Volterra
 # Assumption 1: only limiting factor for prey population growth is the predator
@@ -29,12 +31,13 @@ times=range(1,100)
 y0=[25.,5.]
 parameters=(0.5,0.02,0.1,0.2)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
-simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-p=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
-p=p+labs(title="Lotka-Volterra Model \n Suggested Parameters",x="Time",y="Population")+theme_classic()
-p=p+scale_x_continuous(breaks=(0,10,20,30,40,50,60,70,80,90,100))+scale_y_continuous(breaks=(0,100,200,300,400,500))
-print(p)
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+p=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
 p.save('LVstandard.png')
+
+
 
 
 # Case 2: altered the prey birth rate "b"
@@ -42,11 +45,10 @@ times=range(1,100)
 y0=[25.,5.]
 parameters=(0.25,0.02,0.1,0.2)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
-simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-q=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
-q=q+labs(title="Lotka-Volterra Model \n Decreased Prey Birth Rate",x="Time",y="Population")+theme_classic()
-q=q+scale_x_continuous(breaks=(0,10,20,30,40,50,60,70,80,90,100))+scale_y_continuous(breaks=(0,100,200,300,400,500,600,700,800,900,1000))
-print(q)
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+q=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
 q.save('LVdecreasedB.png')
 # increasing the prey birth rate "b" increased the population of the herbivore
 # as well as the population of the predator by similar proportions
@@ -59,11 +61,11 @@ times=range(1,100)
 y0=[25.,5.]
 parameters=(0.5,0.04,0.1,0.2)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
-simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-r=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
-r=r+labs(title="Lotka-Volterra Model \n Increased Predator Attack Rate",x="Time",y="Population")+theme_classic()
-r=r+scale_x_continuous(breaks=(0,10,20,30,40,50,60,70,80,90,100))+scale_y_continuous(breaks=(0,50,100,150,200,250))
-print(r)
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+r=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
+p.save('LVstandard.png')
 r.save('LVincreasedA')
 # decreasing the predator attack rate "a" increased the maximum prey and predator populations
 # but more importantly in the same time frame as the baseline, decreasing the 
@@ -77,11 +79,10 @@ times=range(1,100)
 y0=[25.,5.]
 parameters=(0.5,0.02,0.05,0.2)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
-simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-s=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
-s=s+labs(title="Lotka-Volterra Model \n Decreased Conversion Efficiency",x="Time",y="Population")+theme_classic()
-s=s+scale_x_continuous(breaks=(0,10,20,30,40,50,60,70,80,90,100))+scale_y_continuous(breaks=(0,200,400,600,800,1000,1200,1400,1600,1800))
-print(s)
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+s=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
 s.save('LVdecreasedE')
 # Increasing the conversion efficiency did not seem to affect the max predator population
 # but it lowered the prey population
@@ -94,12 +95,11 @@ times=range(1,100)
 y0=[25.,5.]
 parameters=(0.5,0.02,0.1,0.1)
 sim=spint.odeint(func=LVSim,y0=y0,t=times,args=parameters)
-simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-t=ggplot(simDF,aes("t","prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes("t","predator"),color="red",size=1)
-t=t+labs(title="Lotka-Volterra Model \n Decreased Predator Death Rate",x="Time",y="Population")+theme_classic()
-t=t+scale_x_continuous(breaks=(0,10,20,30,40,50,60,70,80,90,100))+scale_y_continuous(breaks=(0,100,200,300,400,600,800,1000))
-print(t)
-#t.save('LVdecreasedS')
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+t=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
+t.save('LVdecreasedS')
 # increasing the predator death rate did not affect the max predator population
 # but it increased the maximum prey population as well as increased the number
 # of cycles in the same time period
