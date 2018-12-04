@@ -30,7 +30,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 p=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-p.save('RMstandard.png')
+print(p)
+#p.save('RMstandard.png')
 
 
 # Case 2: altered the prey birth rate "b"
@@ -42,7 +43,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 q=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-q.save('RMdecreasedB.png')
+print(q)
+#q.save('RMdecreasedB.png')
 #increasing the prey birth rate "b" did not change the final prey population,
 #likely because of the system's carrying capacity, but it did increase the 
 #predator population
@@ -59,7 +61,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 r=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-r.save('RMincreasedA')
+print(r)
+#r.save('RMincreasedA')
 #decreasing the predator attack rate "a" caused oscillations in both populations;
 #the prey population oscillated between a number in excess of the system's likely
 #carrying capacity and ~0, while the predator population experienced much smaller
@@ -77,7 +80,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 s=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-s.save('RMdecreasedE')
+print(s)
+#s.save('RMdecreasedE')
 #Increasing the conversion efficiency caused oscillations in both populations;
 #the peak of the oscillations in both populations was above previous final values
 #and the low point in both populations were close to zero
@@ -94,7 +98,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 t=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-t.save('RMincreasedS')
+print(t)
+#t.save('RMincreasedS')
 #Decreasing the death rate caused oscillations in both populations; the peak
 #of the oscillations in both populations was above previous final values and the
 #low point in both populations were close to zero
@@ -111,7 +116,8 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 u=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-u.save('RMdecreasedW')
+print(u)
+#u.save('RMdecreasedW')
 #Increasing w caused oscillations in both populations; the peak of the 
 #oscillations in both populations was slightly above previous final values and 
 #the low point in both populations were close to zero
@@ -128,24 +134,27 @@ modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":s
 modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
 modelOutput=pandas.concat([modelOutputH, modelOutputP])
 v=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color="pop"), size=1)+theme_classic()
-v.save('RMdecreasedD')
+print(v)
+#v.save('RMdecreasedD')
 #Increasing d increased the final prey population and decreased the final 
 #predator population 
 #Decreasing d caused oscillations in both populations; the peak of the 
 #oscillations in the prey population was above the previous final value and the 
 #low point in both populations were close to zero
 
-'''
 
 
 # Paradox of Enrichment
 times=range(1,500)
 y0=[500.,120.]
-parameters=(0.8,0.07,0.001,0.2,5,400)
+parameters=(0.8,0.07,0.0007,0.2,5,400)
 sim=spint.odeint(func=RMSim,y0=y0,t=times,args=parameters)
 simDF=pandas.DataFrame({"t":times,"prey":sim[:,0],"predator":sim[:,1]})
-q=ggplot(simDF,aes(x="t",y="prey"))+geom_line(size=1,color='green')+geom_line(simDF,aes(x="t",y="predator"),color="red",size=1)
-q=q+labs(title="Rosenzweig-MacArthur Model \n alpha=0.001",x="Time",y="Population")+theme_classic()
-q=q+scale_x_continuous(breaks=(0,100,200,300,400,500))+scale_y_continuous(breaks=(0,200,400,600,800,1000,1200,1400,1600,1800,2000))
-print(q)
-#q.save('RM_a=0.001.png')
+modelOutputH=pandas.DataFrame({"t":times,"pop":list("H")*len(times), "density":sim[:,0]})
+modelOutputP=pandas.DataFrame({"t":times,"pop":list("P")*len(times), "density":sim[:,1]})
+modelOutput=pandas.concat([modelOutputH, modelOutputP])
+w=ggplot(modelOutput,aes(x="t",y="density"))+geom_line(aes(color='pop'),size=1)+theme_classic()
+w=w+labs(title="Rosenzweig-MacArthur Model \n Herbivore Carrying Capacity=1429",x="Time",y="Population")
+w=w+scale_x_continuous(breaks=(0,100,200,300,400,500))
+print(w)
+#w.save('RM_a=0.0007.png')
