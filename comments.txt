@@ -1,0 +1,9 @@
+Comments from in-class peer review of other group:
+
+Box and arrow models:
+Might not be necessary to include the state variables on the arrows- we think you just need the parameters)
+Shouldn't there be an arrow between the two populations to show their relationship?
+
+Code/graphs:
+Axis labels and title would be nice, but a legend seems necessary to know which population is which (labs function within ggplot)
+The code looks good--only comment would be just in terms of reading/understanding code, specifying which function was LV vs RM would've been helpful
